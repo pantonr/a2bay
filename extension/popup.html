@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Variant Collector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="sheets.js"></script>
+  <style>
+    /* Base Styles */
+    body {
+      width: 760px;
+      max-height: 600px;
+      padding: 20px;
+      font-family: 'Poppins', Arial, sans-serif;
+      background-color: #f9fafb;
+      color: #333;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a2b3c;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    /* Main Content Area */
+#output {
+    width: 690px;
+    max-width: 100%;
+    word-break: break-word;
+    max-height: 500px;
+    overflow-y: auto;
+    line-height: 1.6;
+    font-size: 0.875rem;
+    border: none;
+    min-height: 0;
+    opacity: 0;  /* Start hidden */
+    padding: 0;
+    transition: all 0.3s ease-out;  /* Smooth fade */
+    transform: translateY(-10px);  /* Start slightly up */
+}
+
+#output:not(:empty) {
+    padding: 35px;
+    background-color: white;
+    border-radius: 6px;
+    margin: 15px 0;
+    opacity: 1;  /* Fade in */
+    transform: translateY(0);  /* Move to natural position */
+}
+    /* Button Styles */
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #collectButton {
+      width: 100%;
+      background-color: #3b82f6;
+    }
+
+    #collectButton:hover {
+      background-color: #2563eb;
+    }
+
+    /* Action Buttons Container */
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Add this for the buttons inside action-buttons */
+.action-buttons .button {
+    flex: 1;  /* This makes each button take up equal space */
+    width: 50%;  /* This ensures a 50-50 split */
+}
+    #copyButton {
+      background-image: linear-gradient(135deg, #635bff, #007aff);
+ 
+    }
+
+    #copyButton:hover {
+      background-image: linear-gradient(135deg, #007aff, #635bff);
+      transform: scale(1.05);
+    }
+
+    #writeToSheet {
+      background-image: linear-gradient(135deg, #34A853, #4285F4);
+    }
+
+    #writeToSheet:hover {
+      background-image: linear-gradient(135deg, #4285F4, #34A853);
+      transform: scale(1.05);
+    }
+
+    /* Variant Display Styles */
+    .variant-item {
+      width: 100%;
+      border-radius: 8px;
+      background: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .variant-separator {
+      border: 0;
+      border-top: 1px solid #eaeaea;
+      margin: 30px 0;
+    }
+
+    /* Field Layout Styles */
+    .field-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .field-stack {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .label {
+      min-width: 80px;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      flex: 1;
+    }
+
+    .bullets-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .bullets-list li {
+      margin-bottom: 5px;
+    }
+
+
+
+    #copyButton:disabled,
+#writeToSheet:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background-image: linear-gradient(135deg, #cccccc, #999999) !important;  /* Gray gradient */
+    box-shadow: none;  /* Remove shadow when disabled */
+}
+
+#copyButton:disabled:hover,
+#writeToSheet:disabled:hover {
+    transform: none;
+    background-image: linear-gradient(135deg, #cccccc, #999999) !important;
+}
+
+
+.image-url a, .video-url a {
+    color: #0066c0;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.image-url a:hover, .video-url a:hover {
+    text-decoration: underline;
+    color: #c45500;
+}
+
+
+.url-grid {
+    display: grid;
+    grid-gap: 5px;
+}
+
+.url-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;  /* Adjust 80px to desired label width */
+    gap: 10px;
+    align-items: start;
+}
+
+.url-label {
+    font-weight: 500;
+    color: #666;
+    white-space: nowrap;
+}
+
+.url-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.url-value a {
+    word-break: break-all;
+}
+
+.variant-type,
+.variant-option,
+.variant-asin,
+.variant-condition,
+.variant-title,
+.variant-description,
+.variant-bullets,
+.variant-image-urls,
+.variant-video-urls {
+    margin-top: 20px;  /* Adjust this value to your preference */
+}
+
+.variant-image-urls .label,
+.variant-video-urls .label {
+    position: relative;
+    padding-top: 20px;
+    margin-bottom: 10px;
+}
+
+.variant-image-urls .label:before,
+.variant-video-urls .label:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;  /* short line */
+    height: 1px;
+    background: rgba(0,0,0,.1);  /* matches your button color */
+}
+span.lightht {
+  font-weight: 100 !important;
+}
+
+
+
+  </style>
+</head>
+<body>
+  <h1>A2Bay <span class="lightht">Variant Identifier</span></h1>
+  
+  <button id="collectButton" class="button">Collect Variants</button>
+  
+<div class="action-buttons">
+    <button id="copyButton" class="button" disabled 
+        title="Nothing to copy yet! Collect some variants first 📋">Copy for Spreadsheet</button>
+    <button id="writeToSheet" class="button" disabled 
+        title="Sheet's feeling empty! Let's get some variants in here first 📝">Write to Google Sheet</button>
+</div>
+
+  <div id="output"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

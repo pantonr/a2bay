@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "A2Bay",
+  "version": "1.0.6",
+  "description": "Helps sellers and shoppers understand product relationships, variations, and family connections on Amazon listings",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "identity",
+    "identity.email",
+    "tabs",
+    "storage"
+  ],
+  "oauth2": {
+    "client_id": "238866359111-b3l0umpqktq5ci4lhmk6i3hut5gidgam.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/spreadsheets"]
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+      "16": "icons/a2bay_16.png",
+      "48": "icons/a2bay_48.png",
+      "128": "icons/a2bay_128.png"
+  },
+  "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icons/a2bay_16.png",
+        "48": "icons/a2bay_48.png",
+        "128": "icons/a2bay_128.png"
+      }
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }]
+}
